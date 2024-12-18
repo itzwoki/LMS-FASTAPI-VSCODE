@@ -16,23 +16,10 @@ license_info={
 
 )
 
-users = []
+from api import users, sections, courses
 
-class User(BaseModel):
-    email: str
-    is_active: bool
-    bio: Optional[str] = None
-    id: int
+app.include_router(users.router)
+app.include_router(sections.router)
+app.include_router(courses.router)
 
-@app.get("/users", response_model=List[User])
-async def get_users():
-    return users
 
-@app.post("/create-user")
-async def add_user(name : User):
-    users.append(name)
-    return {"message" : "User {name} added."}
-
-@app.get("/get-user/{id}")
-async def get_user(id: int = Path(..., description="Enter the Id of User you want to retreive." , gt=0)):
-    return users[id]
